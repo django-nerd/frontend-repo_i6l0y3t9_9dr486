@@ -1,73 +1,61 @@
-function App() {
+import { useState } from 'react';
+import { motion } from 'framer-motion';
+import Hero from './components/Hero';
+import Dashboard from './components/Dashboard';
+import Planner from './components/Planner';
+import Roster from './components/Roster';
+import Auth from './components/Auth';
+import Admin from './components/Admin';
+import { Menu } from 'lucide-react';
+
+function Nav({ current, setCurrent }) {
+  const items = [
+    { key: 'dashboard', label: 'Dashboard' },
+    { key: 'planner', label: 'Planner' },
+    { key: 'roster', label: 'Roster' },
+    { key: 'auth', label: 'Access' },
+    { key: 'admin', label: 'Admin' },
+  ];
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
-
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
-            </div>
-
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
-          </div>
+    <div className="sticky top-0 z-20 backdrop-blur border-b border-cyan-400/10 bg-[#0b0f1a]/60">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-3 text-cyan-100">
+          <Menu className="h-5 w-5 text-cyan-300" />
+          <span className="font-medium tracking-wide">Star Command Center</span>
+        </div>
+        <div className="flex items-center gap-4">
+          {items.map(it => (
+            <button key={it.key} onClick={() => setCurrent(it.key)} className={`text-sm ${current===it.key ? 'text-cyan-200' : 'text-cyan-200/70 hover:text-cyan-200'}`}>{it.label}</button>
+          ))}
         </div>
       </div>
     </div>
-  )
+  );
+}
+
+function App() {
+  const [current, setCurrent] = useState('dashboard');
+  return (
+    <div className="min-h-screen bg-[#080b13] text-cyan-50">
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,211,238,0.08),transparent_45%),radial-gradient(ellipse_at_bottom,rgba(217,70,239,0.06),transparent_45%)]" />
+      <Nav current={current} setCurrent={setCurrent} />
+      <Hero />
+      <main className="relative max-w-7xl mx-auto px-4 -mt-28 pb-20 space-y-10">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="grid lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-3">
+            {current === 'dashboard' && <Dashboard />}
+            {current === 'planner' && <Planner />}
+            {current === 'roster' && <Roster />}
+            {current === 'auth' && <Auth />}
+            {current === 'admin' && <Admin />}
+          </div>
+        </motion.div>
+      </main>
+      <footer className="relative py-10 text-center text-cyan-200/60">
+        <div className="max-w-7xl mx-auto px-4">© {new Date().getFullYear()} Star Command Center</div>
+      </footer>
+    </div>
+  );
 }
 
 export default App
